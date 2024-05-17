@@ -13,12 +13,12 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
 
 const HomeTownScreen = () => {
-  const [homeTown, setHomeTown] = useState('');
+  const [homeTown, setHomeTown] = useState('Delhi');
 
   const navigate = useNavigation();
 
   const handleNext = () => {
-    navigate.navigate('Prompt');
+    navigate.navigate('Photos');
   };
 
   return (
@@ -55,7 +55,7 @@ const HomeTownScreen = () => {
             textAlign: 'center',
             marginTop: 20,
           }}>
-          Your HomeTown ?
+          Where's Your Home Town ?
         </Text>
 
         <TextInput

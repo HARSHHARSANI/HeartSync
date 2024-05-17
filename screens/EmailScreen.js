@@ -13,7 +13,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useNavigation} from '@react-navigation/native';
 
 const EmailScreen = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('asdasd@gmail.com');
   const navigate = useNavigation();
 
   const handleNext = () => {
@@ -92,6 +92,7 @@ const EmailScreen = () => {
           placeholder="Email"
           placeholderTextColor={'black'}
           autoFocus
+          value={email}
           onChangeText={text => setEmail(text)}
         />
         <Text

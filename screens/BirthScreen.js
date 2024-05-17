@@ -16,9 +16,9 @@ const BirthScreen = () => {
   const monthRef = useRef(null);
   const yearRef = useRef(null);
 
-  const [day, setDay] = useState('');
-  const [month, setMonth] = useState('');
-  const [year, setYear] = useState('');
+  const [day, setDay] = useState('11');
+  const [month, setMonth] = useState('11');
+  const [year, setYear] = useState('1111');
 
   const isValidDay = day =>
     day.length === 2 && parseInt(day) > 0 && parseInt(day) <= 31;

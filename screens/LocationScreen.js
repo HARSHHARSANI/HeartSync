@@ -12,12 +12,12 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const LocationScreen = () => {
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState('Hyderabad');
 
   const navigate = useNavigation();
 
   const handleNext = () => {
-    navigate.navigate('LookingFor');
+    navigate.navigate('TypeScreen');
   };
 
   return (

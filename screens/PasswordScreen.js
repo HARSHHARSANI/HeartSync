@@ -12,7 +12,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useNavigation} from '@react-navigation/native';
 
 const PasswordScreen = () => {
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('asdasd');
 
   const navigate = useNavigation();
 
@@ -82,6 +82,7 @@ const PasswordScreen = () => {
           placeholder="Password"
           placeholderTextColor={'black'}
           autoFocus
+          value={password}
           onChangeText={text => setPassword(text)}
         />
 

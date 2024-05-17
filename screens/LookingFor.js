@@ -13,8 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 const LookingFor = () => {
   const navigate = useNavigation();
 
-  const [selectedGender, setSelectedGender] = useState('');
-
+  const [lookingFor, setLookingFor] = useState('Life Partner');
   const handleNext = () => {
     navigate.navigate('HomeTown');
   };
@@ -57,68 +56,150 @@ const LookingFor = () => {
             textAlign: 'center',
             marginTop: 20,
           }}>
-          Your Preferences
+          What's your dating intention?
         </Text>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            marginTop: 20,
-            gap: 10,
-          }}>
+        <View>
           <TouchableOpacity
+            onPress={() => setLookingFor('Friends')}
             style={{
-              backgroundColor:
-                selectedGender === 'Male' ? '#993C4F' : '#e0e0e0',
-              padding: 15,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginHorizontal: 20,
+              marginVertical: 10,
+              backgroundColor: lookingFor === 'Friends' ? '#FFC0CB' : 'white',
+              padding: 10,
               borderRadius: 10,
-              marginHorizontal: 5,
-            }}
-            onPress={() => setSelectedGender('Male')}>
-            <Text
-              style={{
-                color: selectedGender === 'Male' ? 'white' : 'black',
-                fontSize: 16,
-              }}>
-              Male
+            }}>
+            <Text style={{fontSize: 20, fontFamily: 'GeezaPro-Bold'}}>
+              Friends
             </Text>
+            {lookingFor === 'Friends' && (
+              <MaterialCommunityIcons
+                name="check"
+                size={30}
+                color={'#581845'}
+              />
+            )}
           </TouchableOpacity>
-
           <TouchableOpacity
+            onPress={() => setLookingFor('Casual')}
             style={{
-              backgroundColor:
-                selectedGender === 'Female' ? '#993C4F' : '#e0e0e0',
-              padding: 15,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginHorizontal: 20,
+              marginVertical: 10,
+              backgroundColor: lookingFor === 'Casual' ? '#FFC0CB' : 'white',
+              padding: 10,
               borderRadius: 10,
-              marginHorizontal: 5,
-            }}
-            onPress={() => setSelectedGender('Female')}>
-            <Text
-              style={{
-                color: selectedGender === 'Female' ? 'white' : 'black',
-                fontSize: 16,
-              }}>
-              Female
+            }}>
+            <Text style={{fontSize: 20, fontFamily: 'GeezaPro-Bold'}}>
+              Casual
             </Text>
+            {lookingFor === 'Casual' && (
+              <MaterialCommunityIcons
+                name="check"
+                size={30}
+                color={'#581845'}
+              />
+            )}
           </TouchableOpacity>
-
           <TouchableOpacity
+            onPress={() => setLookingFor('Dating')}
             style={{
-              backgroundColor:
-                selectedGender === 'Other' ? '#993C4F' : '#e0e0e0',
-              padding: 15,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginHorizontal: 20,
+              marginVertical: 10,
+              backgroundColor: lookingFor === 'Dating' ? '#FFC0CB' : 'white',
+              padding: 10,
               borderRadius: 10,
-              marginHorizontal: 5,
-            }}
-            onPress={() => setSelectedGender('Other')}>
-            <Text
-              style={{
-                color: selectedGender === 'Other' ? 'white' : 'black',
-                fontSize: 16,
-              }}>
-              Other
+            }}>
+            <Text style={{fontSize: 20, fontFamily: 'GeezaPro-Bold'}}>
+              Dating
             </Text>
+            {lookingFor === 'Dating' && (
+              <MaterialCommunityIcons
+                name="check"
+                size={30}
+                color={'#581845'}
+              />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setLookingFor('Networking')}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginHorizontal: 20,
+              marginVertical: 10,
+              backgroundColor:
+                lookingFor === 'Networking' ? '#FFC0CB' : 'white',
+              padding: 10,
+              borderRadius: 10,
+            }}>
+            <Text style={{fontSize: 20, fontFamily: 'GeezaPro-Bold'}}>
+              Networking
+            </Text>
+            {lookingFor === 'Networking' && (
+              <MaterialCommunityIcons
+                name="check"
+                size={30}
+                color={'#581845'}
+              />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setLookingFor('Life Partner')}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginHorizontal: 20,
+              marginVertical: 10,
+              backgroundColor:
+                lookingFor === 'Life Partner' ? '#FFC0CB' : 'white',
+              padding: 10,
+              borderRadius: 10,
+            }}>
+            <Text style={{fontSize: 20, fontFamily: 'GeezaPro-Bold'}}>
+              Life Partner
+            </Text>
+            {lookingFor === 'Life Partner' && (
+              <MaterialCommunityIcons
+                name="check"
+                size={30}
+                color={'#581845'}
+              />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setLookingFor('Not Sure Lets See')}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginHorizontal: 20,
+              marginVertical: 10,
+              backgroundColor:
+                lookingFor === 'Not Sure Lets See' ? '#FFC0CB' : 'white',
+              padding: 10,
+              borderRadius: 10,
+            }}>
+            <Text style={{fontSize: 20, fontFamily: 'GeezaPro-Bold'}}>
+              Not Sure Lets See
+            </Text>
+            {lookingFor === 'Not Sure Lets See' && (
+              <MaterialCommunityIcons
+                name="check"
+                size={30}
+                color={'#581845'}
+              />
+            )}
           </TouchableOpacity>
         </View>
 

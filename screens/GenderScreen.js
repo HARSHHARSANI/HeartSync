@@ -8,10 +8,12 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
 
 const GenderScreen = () => {
-  const [selectedGender, setSelectedGender] = useState(null);
+  const [selectedGender, setSelectedGender] = useState('Male');
+  const [isProfileVisible, setIsProfileVisible] = useState(true);
   const navigate = useNavigation();
 
   const handleNext = () => {
@@ -60,7 +62,7 @@ const GenderScreen = () => {
             textAlign: 'center',
             marginTop: 20,
           }}>
-          What's your Gender
+          Which Gender Describes You The Best?
         </Text>
 
         <View
@@ -121,6 +123,41 @@ const GenderScreen = () => {
                 fontSize: 16,
               }}>
               Other
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View>
+          <Text
+            style={{
+              fontSize: 16,
+              textAlign: 'center',
+              marginTop: 20,
+              color: '#A9A9A9',
+            }}>
+            You can change this later
+          </Text>
+
+          <TouchableOpacity
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 20,
+              gap: 10,
+            }}
+            onPress={() => setIsProfileVisible(!isProfileVisible)}>
+            <AntDesign
+              name={isProfileVisible && 'checksquare'}
+              size={30}
+              color={'#993C4F'}
+            />
+            <Text
+              style={{
+                fontSize: 16,
+                color: '#A9A9A9',
+              }}>
+              {isProfileVisible ? 'Visible on Profile ' : 'Hidden on Profile '}
             </Text>
           </TouchableOpacity>
         </View>

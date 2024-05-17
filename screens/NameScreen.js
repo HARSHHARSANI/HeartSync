@@ -12,7 +12,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useNavigation} from '@react-navigation/native';
 
 const NameScreen = () => {
-  const [firstName, setFirstName] = useState('');
+  const [firstName, setFirstName] = useState('asdasd');
   const navigate = useNavigation();
 
   const handleNext = () => {

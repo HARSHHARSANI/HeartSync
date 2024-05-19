@@ -22,10 +22,11 @@ import LocationScreen from '../screens/LocationScreen';
 import DatingType from '../screens/DatingType';
 import HomeTownScreen from '../screens/HomeTownScreen';
 import LookingFor from '../screens/LookingFor';
-import promptScreen from '../screens/PromptScreen';
+import PromptScreen from '../screens/PromptScreen';
 import PhotoScreen from '../screens/PhotoScreen';
 import TypeScreen from '../screens/TypeScreen';
 import PrefinalScreens from '../screens/PrefinalScreens';
+import ShowPrompts from '../screens/ShowPrompts';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -183,9 +184,15 @@ const StackNavigator = () => {
         />
         <Stack.Screen
           name="Prompt"
-          component={promptScreen}
+          component={PromptScreen}
           options={{headerShown: false}}
         />
+        <Stack.Screen
+          name="ShowPrompts"
+          component={ShowPrompts}
+          options={{headerShown: false}}
+        />
+
         <Stack.Screen
           name="Prefinal"
           component={PrefinalScreens}

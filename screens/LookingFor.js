@@ -15,7 +15,9 @@ const LookingFor = () => {
 
   const [lookingFor, setLookingFor] = useState('Life Partner');
   const handleNext = () => {
-    navigate.navigate('HomeTown');
+    navigate.navigate('HomeTown', {
+      lookingFor,
+    });
   };
 
   return (

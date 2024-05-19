@@ -18,7 +18,9 @@ const HomeTownScreen = () => {
   const navigate = useNavigation();
 
   const handleNext = () => {
-    navigate.navigate('Photos');
+    navigate.navigate('Photos', {
+      homeTown,
+    });
   };
 
   return (

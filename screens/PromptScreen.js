@@ -6,34 +6,37 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 const PromptScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [answers, setAnswers] = useState({});
+
+  useEffect(() => {
+    if (route.params?.selectedOptions) {
+      setSelectedOptions(route.params.selectedOptions);
+      setAnswers(route.params.answers || {});
+    }
+  }, [route.params]);
 
   const handleNext = () => {
-    navigation.navigate('Photos', {
+    navigation.navigate('ShowPrompts', {
       selectedOptions,
+      answers,
     });
   };
 
-  const options = [
-    'Party Animal',
-    'Reading',
-    'Fun',
-    'Shopping',
-    'Hookups',
-    'Sports',
-    'Traveling',
-    'Cooking',
-    'Gaming',
-    'Music',
-    'Art',
-  ];
+  const handleSelectPrompt = () => {
+    navigation.navigate('ShowPrompts', {
+      selectedOptions,
+      answers,
+    });
+  };
 
   const toggleOption = option => {
     setSelectedOptions(prevSelectedOptions =>
@@ -77,43 +80,65 @@ const PromptScreen = () => {
             textAlign: 'center',
             marginTop: 20,
           }}>
-          Describe Yourself
+          Write Your Profile Answers
         </Text>
 
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: 'bold',
-            textAlign: 'center',
-            marginTop: 20,
-            marginBottom: 10,
-          }}>
-          Select options that best describe you:
-        </Text>
+        {selectedOptions.length === 0 ? (
+          <View style={{marginTop: 20}}>
+            {[
+              'Select prompts to answer',
+              'Select prompts to answer',
+              'Select prompts to answer',
+            ].map((text, index) => (
+              <TouchableOpacity key={index} onPress={handleSelectPrompt}>
+                <View style={styles.promptPlaceholder}>
+                  <Text style={styles.promptPlaceholderText}>{text}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        ) : (
+          <View style={styles.answersContainer}>
+            {selectedOptions.map((option, index) => (
+              <View key={index} style={styles.selectedOption}>
+                <Text style={styles.selectedOptionText}>{option}</Text>
+                <Text style={styles.answerText}>
+                  {answers[option] || 'No answer provided'}
+                </Text>
+              </View>
+            ))}
+          </View>
+        )}
 
-        <View style={styles.optionsContainer}>
-          {options.map(option => (
-            <TouchableOpacity
-              key={option}
-              style={[
-                styles.optionButton,
-                {
-                  backgroundColor: selectedOptions.includes(option)
-                    ? '#993C4F'
-                    : '#e0e0e0',
-                },
-              ]}
-              onPress={() => toggleOption(option)}>
-              <Text
-                style={{
-                  color: selectedOptions.includes(option) ? 'white' : 'black',
-                  fontSize: 16,
-                }}>
-                {option}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        {route.params?.prompts ? (
+          <View style={styles.optionsContainer}>
+            {route.params.prompts.map((option, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.optionButton,
+                  {
+                    backgroundColor: selectedOptions.includes(option)
+                      ? '#FFC0CB'
+                      : 'white',
+                  },
+                ]}
+                onPress={() => toggleOption(option)}>
+                <Text
+                  style={{
+                    color: selectedOptions.includes(option) ? 'white' : 'black',
+                    fontWeight: 'bold',
+                  }}>
+                  {option}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        ) : (
+          <Text style={{marginTop: 20, textAlign: 'center', color: '#A0A0A0'}}>
+            No prompts available
+          </Text>
+        )}
 
         <TouchableOpacity onPress={handleNext}>
           <MaterialCommunityIcons
@@ -144,7 +169,35 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginVertical: 5,
-    width: '45%', // Adjusting width to fit two buttons per row
+    width: '45%',
     alignItems: 'center',
+  },
+  promptPlaceholder: {
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: '#E0E0E0',
+    marginBottom: 10,
+  },
+  promptPlaceholderText: {
+    textAlign: 'center',
+    color: '#A0A0A0',
+    fontSize: 16,
+  },
+  answersContainer: {
+    marginTop: 20,
+  },
+  selectedOption: {
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: '#FFC0CB',
+    marginBottom: 10,
+  },
+  selectedOptionText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  answerText: {
+    marginTop: 5,
+    color: '#333',
   },
 });

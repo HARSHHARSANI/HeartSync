@@ -25,7 +25,7 @@ const PhotoScreen = () => {
   };
 
   const handleSelectImage = index => {
-    launchImageLibrary({mediaType: 'photo', mediaType: 'video'}, response => {
+    launchImageLibrary({mediaType: 'photo'}, response => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.errorMessage) {
@@ -42,16 +42,8 @@ const PhotoScreen = () => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
       <ScrollView contentContainerStyle={{paddingBottom: 20}}>
-        <View
-          style={{
-            marginTop: 90,
-            marginHorizontal: 20,
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
+        <View style={{marginTop: 90, marginHorizontal: 20}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View
               style={{
                 width: 44,
@@ -81,14 +73,14 @@ const PhotoScreen = () => {
               textAlign: 'center',
               marginTop: 20,
             }}>
-            Pick Your Photos And Video's
+            Pick Your Photos And Videos
           </Text>
           <View
             style={{
               flexDirection: 'row',
               flexWrap: 'wrap',
-              justifyContent: 'space-between',
               marginTop: 20,
+              gap: 10,
             }}>
             {imgUrls?.slice(0, 6).map((item, index) =>
               item ? (

@@ -1,308 +1,252 @@
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {useState, useEffect} from 'react';
 import {
+  Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
-  View,
-  Pressable,
-  TouchableOpacity,
   TextInput,
-  Button,
+  View,
 } from 'react-native';
-import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {
-  BottomModal,
-  ModalContent,
-  ModalTitle,
-  SlideAnimation,
-} from 'react-native-modals';
+import {BottomModal, ModalContent, SlideAnimation} from 'react-native-modals';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const ShowPrompts = () => {
   const navigation = useNavigation();
-  const [selectedPrompts, setSelectedPrompts] = useState({});
-  const [currentCategory, setCurrentCategory] = useState('About me');
+  const route = useRoute();
+  const [option, setOption] = useState('About me');
+  const [answer, setAnswer] = useState('');
   const [isModelVisible, setIsModelVisible] = useState(false);
+  const [prompts, setPrompts] = useState([]);
+  const [answeredPrompts, setAnsweredPrompts] = useState([]);
   const [question, setQuestion] = useState('');
-  const [promptAnswer, setPromptAnswer] = useState('');
+
   const promptss = [
     {
       id: '0',
       name: 'About me',
       questions: [
-        {
-          id: '10',
-          question: 'A random fact I love is',
-        },
-        {
-          id: '11',
-          question: 'Typical Sunday',
-        },
-        {
-          id: '12',
-          question: 'I go crazy for',
-        },
-        {
-          id: '13',
-          question: 'Unusual Skills',
-        },
-        {
-          id: '14',
-          question: 'My greatest strength',
-        },
-        {
-          id: '15',
-          question: 'My simple pleasures',
-        },
-        {
-          id: '16',
-          question: 'A life goal of mine',
-        },
+        {id: '10', question: 'A random fact I love is'},
+        {id: '11', question: 'Typical Sunday'},
+        {id: '12', question: 'I go crazy for'},
+        {id: '13', question: 'Unusual Skills'},
+        {id: '14', question: 'My greatest strength'},
+        {id: '15', question: 'My simple pleasures'},
+        {id: '16', question: 'A life goal of mine'},
       ],
     },
     {
       id: '2',
       name: 'Self Care',
       questions: [
-        {
-          id: '10',
-          question: 'I unwind by',
-        },
-        {
-          id: '11',
-          question: 'A boundary of mine is',
-        },
-        {
-          id: '12',
-          question: 'I feel most supported when',
-        },
-        {
-          id: '13',
-          question: 'I hype myself up by',
-        },
-        {
-          id: '14',
-          question: 'To me, relaxation is',
-        },
-        {
-          id: '15',
-          question: 'I beat my blues by',
-        },
-        {
-          id: '16',
-          question: 'My skin care routine',
-        },
+        {id: '10', question: 'I unwind by'},
+        {id: '11', question: 'A boundary of mine is'},
+        {id: '12', question: 'I feel most supported when'},
+        {id: '13', question: 'I hype myself up by'},
+        {id: '14', question: 'To me, relaxation is'},
+        {id: '15', question: 'I beat my blues by'},
+        {id: '16', question: 'My skin care routine'},
       ],
     },
   ];
 
+  useEffect(() => {
+    setPrompts(promptss[0].questions);
+  }, []);
+
+  useEffect(() => {
+    if (answeredPrompts.length >= 3) {
+      navigation.navigate('Prompt', {prompts: answeredPrompts});
+    }
+  }, [answeredPrompts, navigation]);
+
   const openModel = item => {
     setIsModelVisible(true);
-    setQuestion(item.question);
+    setQuestion(item?.question);
   };
 
-  const handleNext = () => {
-    navigation.navigate('Prefinal', {selectedPrompts});
+  const addPrompt = () => {
+    const newPrompt = {question, answer};
+    setAnsweredPrompts(prevAnsweredPrompts => [
+      ...prevAnsweredPrompts,
+      newPrompt,
+    ]);
+    setIsModelVisible(false);
+    setQuestion('');
+    setAnswer('');
   };
 
-  const handleSelectPrompt = (category, promptId) => {
-    setSelectedPrompts(prevState => ({
-      ...prevState,
-      [category]: {
-        ...prevState[category],
-        [promptId]: !prevState[category]?.[promptId],
-      },
-    }));
-  };
-
-  const getQuestionsForCategory = category => {
-    return promptss.find(item => item.name === category)?.questions || [];
-  };
-
-  const currentPrompts = getQuestionsForCategory(currentCategory);
+  console.log(answeredPrompts, 'answeredPrompts');
 
   return (
     <>
       <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
         <View
           style={{
-            justifyContent: 'space-evenly',
+            padding: 10,
             flexDirection: 'row',
             alignItems: 'center',
-            marginHorizontal: 10,
+            justifyContent: 'space-around',
+            marginTop: 50,
           }}>
           <Text
             style={{
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: 'bold',
               fontFamily: 'GeezaPro-Bold',
               textAlign: 'center',
-              marginTop: 20,
             }}>
-            View All
+            About Me
           </Text>
           <Text
             style={{
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: 'bold',
               fontFamily: 'GeezaPro-Bold',
               textAlign: 'center',
-              marginTop: 20,
             }}>
             Prompts
           </Text>
         </View>
-
         <View
           style={{
-            marginTop: 20,
-            marginHorizontal: 12,
             flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'flex-start',
+            gap: 20,
+            marginTop: 20,
+            height: 50,
+            alignItems: 'center',
+            marginHorizontal: 10,
           }}>
           {promptss.map((item, index) => (
-            <View
+            <Pressable
               key={index}
+              onPress={() => {
+                setPrompts(item.questions);
+                setOption(item.name);
+              }}
               style={{
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                marginHorizontal: 20,
+                marginHorizontal: 10,
               }}>
-              <Pressable onPress={() => setCurrentCategory(item.name)}>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    fontFamily: 'GeezaPro-Bold',
-                    textAlign: 'center',
-                    marginTop: 20,
-                    padding: 10,
-                    borderRadius: 20,
-                    backgroundColor:
-                      currentCategory === item.name ? '#581845' : 'white',
-                    color: currentCategory === item.name ? 'white' : 'black',
-                  }}>
-                  {item.name}
-                </Text>
-              </Pressable>
-            </View>
-          ))}
-        </View>
-
-        <View>
-          {currentPrompts.map((item, index) => (
-            <View
-              key={index}
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-                marginHorizontal: 20,
-              }}>
-              <Pressable
-                onPress={() => openModel(item)}
+              <Text
                 style={{
-                  width: '100%',
-                  backgroundColor: selectedPrompts[currentCategory]?.[item.id]
-                    ? '#581845'
-                    : 'white',
-                  padding: 10,
-                  borderRadius: 10,
-                  marginTop: 20,
+                  fontSize: 16,
+                  fontFamily: 'GeezaPro-Bold',
+                  textAlign: 'center',
+                  padding: 11,
+                  borderRadius: 20,
+                  backgroundColor: option === item.name ? '#581845' : 'white',
+                  color: option === item.name ? 'white' : 'black',
                 }}>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    fontFamily: 'GeezaPro-Bold',
-                    color: selectedPrompts[currentCategory]?.[item.id]
-                      ? 'white'
-                      : 'black',
-                  }}>
-                  {item.question}
-                </Text>
-              </Pressable>
-            </View>
+                {item.name}
+              </Text>
+            </Pressable>
           ))}
         </View>
-
-        <TouchableOpacity onPress={handleNext}>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: 'bold',
-              fontFamily: 'GeezaPro-Bold',
-              textAlign: 'center',
-              marginTop: 20,
-              color: '#581845',
-            }}>
-            Next
-          </Text>
-        </TouchableOpacity>
+        <View>
+          {prompts.map((item, index) => (
+            <Pressable
+              style={{
+                marginTop: 10,
+                marginHorizontal: 10,
+                width: '90%',
+                alignSelf: 'center',
+              }}
+              key={index}
+              onPress={() => {
+                openModel(item);
+              }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: 'GeezaPro-Bold',
+                  textAlign: 'left',
+                  padding: 10,
+                  borderRadius: 20,
+                  backgroundColor: 'white',
+                  color: 'black',
+                }}>
+                {item.question}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
       </SafeAreaView>
       <BottomModal
-        onBackdropPress={() => setIsModelVisible(false)}
-        onTouchOutside={() => setIsModelVisible(false)}
         onHardwareBackPress={() => {
           setIsModelVisible(false);
-          return true;
+        }}
+        onSwipeOut={() => {
+          setIsModelVisible(false);
+        }}
+        visible={isModelVisible}
+        onBackdropPress={() => {
+          setIsModelVisible(false);
         }}
         swipeDirection={['down', 'up']}
-        swipeThreshold={200}
-        modalTitle={<ModalTitle title="Answer the question" />}
         modalAnimation={new SlideAnimation({slideFrom: 'bottom'})}
-        visible={isModelVisible}
-        width={0.9}
-        height={0.3}>
+        height={300}>
         <ModalContent>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: 'bold',
-              fontFamily: 'GeezaPro-Bold',
-              textAlign: 'center',
-              marginTop: 20,
-              color: 'black',
-            }}>
-            {question}
-          </Text>
-          <TextInput
-            autoFocus
-            style={{
-              height: 40,
-              borderColor: 'gray',
-              borderWidth: 1,
-              borderRadius: 10,
-              placeholder: 'Type your answer here',
-              marginHorizontal: 20,
-              marginTop: 20,
-            }}
-            onChangeText={text => setPromptAnswer(text)}
-            value={promptAnswer}
-          />
-          <TouchableOpacity
-            title="Save Answer"
-            backgroundColor="#581845"
-            onPress={() => {
-              setIsModelVisible(false);
-              setPromptAnswer('');
-            }}
-            style={{
-              padding: 10,
-              borderRadius: 15,
-              marginTop: 20,
-              backgroundColor: '#581845',
-            }}>
+          <View>
             <Text
               style={{
-                fontSize: 16,
+                fontSize: 20,
                 fontWeight: 'bold',
                 fontFamily: 'GeezaPro-Bold',
                 textAlign: 'center',
-                color: 'white',
+                marginTop: 10,
               }}>
-              Save Answer
+              Answer Your Question
             </Text>
-          </TouchableOpacity>
+
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                marginBottom: 10,
+                fontFamily: 'GeezaPro-Bold',
+                textAlign: 'center',
+                marginTop: 20,
+              }}>
+              {question}
+            </Text>
+            <View
+              style={{
+                borderColor: '#202020',
+                borderWidth: 1,
+                padding: 10,
+                borderRadius: 10,
+                height: 100,
+                marginVertical: 20,
+                borderStyle: 'dashed',
+              }}>
+              <TextInput
+                placeholder="Enter your answer"
+                value={answer}
+                onChangeText={setAnswer}
+                style={{
+                  fontSize: 16,
+                  fontFamily: 'GeezaPro-Bold',
+                }}
+              />
+            </View>
+            <Pressable
+              onPress={addPrompt}
+              style={{
+                marginBottom: 20,
+              }}>
+              <AntDesign
+                name="checkcircle"
+                size={30}
+                color="green"
+                style={{
+                  alignSelf: 'flex-end',
+                  marginTop: 10,
+                }}
+              />
+            </Pressable>
+          </View>
         </ModalContent>
       </BottomModal>
     </>

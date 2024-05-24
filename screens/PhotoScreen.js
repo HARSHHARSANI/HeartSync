@@ -7,36 +7,58 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
 import {launchImageLibrary} from 'react-native-image-picker';
+import {
+  getRegistrationProgress,
+  saveRegistrationProgress,
+} from '../RegisterationUtil';
 
 const PhotoScreen = () => {
   const navigation = useNavigation();
   const [imgUrls, setImgUrls] = useState(['', '', '', '', '', '']);
   const [imageUrl, setImageUrl] = useState('');
 
+  useEffect(() => {
+    getRegistrationProgress('Photo').then(data => {
+      if (data && data.imageUrls) {
+        setImgUrls(data.imgUrls || ['', '', '', '', '', '']);
+      }
+    });
+  }, []);
+
   const handleNext = () => {
+    if (imgUrls.filter(Boolean).length < 3) {
+      alert('Please select atleast 3 images');
+      return;
+    }
+
+    saveRegistrationProgress('Photo', {imgUrls});
+
     navigation.navigate('Prompt', {
       imageUrl,
     });
   };
 
   const handleSelectImage = index => {
-    launchImageLibrary({mediaType: 'photo'}, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.errorMessage) {
-        console.log('ImagePicker Error: ', response.errorMessage);
-      } else {
-        const selectedImage = response.assets[0].uri;
-        const newImgUrls = [...imgUrls];
-        newImgUrls[index] = selectedImage;
-        setImgUrls(newImgUrls);
-      }
-    });
+    launchImageLibrary(
+      {mediaType: 'photo', mediaType: 'video', mediaType: 'mixed'},
+      response => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.errorMessage) {
+          console.log('ImagePicker Error: ', response.errorMessage);
+        } else {
+          const selectedImage = response.assets[0].uri;
+          const newImgUrls = [...imgUrls];
+          newImgUrls[index] = selectedImage;
+          setImgUrls(newImgUrls);
+        }
+      },
+    );
   };
 
   return (

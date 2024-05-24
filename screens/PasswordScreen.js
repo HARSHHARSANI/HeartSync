@@ -7,17 +7,22 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
+import {
+  getRegistrationProgress,
+  saveRegistrationProgress,
+} from '../RegisterationUtil';
 
 const PasswordScreen = () => {
-  const [password, setPassword] = useState('asdasd');
+  const [password, setPassword] = useState('');
 
   const navigate = useNavigation();
 
   const handleNext = () => {
     if (password.length > 5) {
+      saveRegistrationProgress('Password', {password: password});
       navigate.navigate('Birth', {password: password});
     } else {
       alert('Please Enter Your Password');

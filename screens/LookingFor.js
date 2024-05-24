@@ -6,15 +6,34 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
+import {
+  getRegistrationProgress,
+  saveRegistrationProgress,
+} from '../RegisterationUtil';
 
 const LookingFor = () => {
   const navigate = useNavigation();
 
-  const [lookingFor, setLookingFor] = useState('Life Partner');
+  useEffect(() => {
+    getRegistrationProgress('LookingFor').then(data => {
+      if (data) {
+        setLookingFor(data.lookingFor || '');
+      }
+    });
+  }, []);
+
+  const [lookingFor, setLookingFor] = useState('');
   const handleNext = () => {
+    if (lookingFor === '') {
+      alert('Please select an option');
+      return;
+    }
+
+    saveRegistrationProgress('LookingFor', {lookingFor});
+
     navigate.navigate('HomeTown', {
       lookingFor,
     });

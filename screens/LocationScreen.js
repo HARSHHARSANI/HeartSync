@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   SafeAreaView,
@@ -10,14 +10,29 @@ import {
   View,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  getRegistrationProgress,
+  saveRegistrationProgress,
+} from '../RegisterationUtil';
 
 const LocationScreen = () => {
-  const [location, setLocation] = useState('Hyderabad');
+  const [location, setLocation] = useState('');
 
   const navigate = useNavigation();
 
+  useEffect(() => {
+    getRegistrationProgress('Location').then(data => {
+      if (data) {
+        setLocation(data.location || '');
+      }
+    });
+  }, []);
+
   const handleNext = () => {
-    navigate.navigate('TypeScreen');
+    if (location.length > 0) {
+      saveRegistrationProgress('Location', {location: location});
+      navigate.navigate('TypeScreen', {location: location});
+    }
   };
 
   return (

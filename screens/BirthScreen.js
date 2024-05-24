@@ -7,18 +7,22 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
+import {
+  getRegistrationProgress,
+  saveRegistrationProgress,
+} from '../RegisterationUtil';
 
 const BirthScreen = () => {
   const navigate = useNavigation();
   const monthRef = useRef(null);
   const yearRef = useRef(null);
 
-  const [day, setDay] = useState('11');
-  const [month, setMonth] = useState('11');
-  const [year, setYear] = useState('1111');
+  const [day, setDay] = useState('');
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('');
 
   const isValidDay = day =>
     day.length === 2 && parseInt(day) > 0 && parseInt(day) <= 31;
@@ -27,8 +31,19 @@ const BirthScreen = () => {
   const isValidYear = year =>
     year.length === 4 && parseInt(year) <= new Date().getFullYear();
 
+  useEffect(() => {
+    getRegistrationProgress('Birth').then(data => {
+      if (data) {
+        setDay(data.day || '');
+        setMonth(data.month || '');
+        setYear(data.year || '');
+      }
+    });
+  }, []);
+
   const handleNext = () => {
     if (isValidDay(day) && isValidMonth(month) && isValidYear(year)) {
+      saveRegistrationProgress('Birth', {day, month, year});
       navigate.navigate('Gender', {birth: {day, month, year}});
     } else {
       alert('Please enter a valid date');

@@ -1,6 +1,6 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useContext } from 'react';
 import {StyleSheet} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -27,10 +27,12 @@ import PhotoScreen from '../screens/PhotoScreen';
 import TypeScreen from '../screens/TypeScreen';
 import PrefinalScreens from '../screens/PrefinalScreens';
 import ShowPrompts from '../screens/ShowPrompts';
+import { AuthContext } from '../AuthContext';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
+  const {token, isLoading} = useContext(AuthContext);
 
   function BottomTabs() {
     return (
@@ -216,7 +218,7 @@ const StackNavigator = () => {
 
   return (
     <NavigationContainer>
-      <AuthStack />
+      {token === null || token === '' ? <AuthStack /> : <MainStack />}
     </NavigationContainer>
   );
 };

@@ -10,12 +10,14 @@ import {
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {saveRegistrationProgress} from '../RegisterationUtil';
 
 const PromptScreen = () => {
   const navigate = useNavigation();
   const route = useRoute();
 
   const handleNext = () => {
+    saveRegistrationProgress('Prompt', {prompts: route.params.prompts});
     navigate.navigate('Prefinal');
   };
 

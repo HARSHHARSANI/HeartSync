@@ -5,24 +5,44 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
+import {
+  getRegistrationProgress,
+  saveRegistrationProgress,
+} from '../RegisterationUtil';
 
 const GenderScreen = () => {
-  const [selectedGender, setSelectedGender] = useState('Male');
+  const [selectedGender, setSelectedGender] = useState('');
   const [isProfileVisible, setIsProfileVisible] = useState(true);
-  const navigate = useNavigation();
+  const navigation = useNavigation(); // Corrected the navigation hook
+
+  useEffect(() => {
+    getRegistrationProgress('Gender').then(data => {
+      if (data) {
+        setSelectedGender(data.selectedGender || '');
+        setIsProfileVisible(
+          data.isProfileVisible !== undefined ? data.isProfileVisible : true,
+        );
+      }
+    });
+  }, []);
 
   const handleNext = () => {
     if (selectedGender) {
-      navigate.navigate('Location', {gender: selectedGender});
+      saveRegistrationProgress('Gender', {
+        gender: selectedGender,
+        isProfileVisible,
+      });
+      navigation.navigate('Location', {gender: selectedGender});
     } else {
-      alert('Please select your gender');
+      Alert.alert('Please select your gender');
     }
-  };
+  };  
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
@@ -148,7 +168,7 @@ const GenderScreen = () => {
             }}
             onPress={() => setIsProfileVisible(!isProfileVisible)}>
             <AntDesign
-              name={isProfileVisible && 'checksquare'}
+              name={isProfileVisible ? 'checksquare' : 'checksquareo'}
               size={30}
               color={'#993C4F'}
             />
@@ -157,19 +177,17 @@ const GenderScreen = () => {
                 fontSize: 16,
                 color: '#A9A9A9',
               }}>
-              {isProfileVisible ? 'Visible on Profile ' : 'Hidden on Profile '}
+              {isProfileVisible ? 'Visible on Profile' : 'Hidden on Profile'}
             </Text>
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity onPress={handleNext}>
+        <TouchableOpacity
+          onPress={handleNext}
+          style={{alignSelf: 'flex-end', marginTop: 30}}>
           <MaterialCommunityIcons
             name="arrow-right-circle"
             size={45}
-            style={{
-              marginTop: 30,
-              alignSelf: 'flex-end',
-            }}
             color={'#581845'}
           />
         </TouchableOpacity>

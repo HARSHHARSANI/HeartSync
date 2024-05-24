@@ -8,16 +8,29 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
+import {
+  getRegistrationProgress,
+  saveRegistrationProgress,
+} from '../RegisterationUtil';
 
 const EmailScreen = () => {
-  const [email, setEmail] = useState('asdasd@gmail.com');
+  const [email, setEmail] = useState('');
   const navigate = useNavigation();
+
+  useEffect(() => {
+    getRegistrationProgress('Email').then(data => {
+      if (data) {
+        setEmail(data.email || '');
+      }
+    });
+  }, []);
 
   const handleNext = () => {
     if (email.length > 0) {
+      saveRegistrationProgress('Email', {email: email});
       navigate.navigate('Password', {email: email});
     } else {
       alert('Please Enter Your Email');

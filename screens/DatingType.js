@@ -10,16 +10,37 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {
+  getRegistrationProgress,
+  saveRegistrationProgress,
+} from '../RegisterationUtil';
 
 const DatingType = () => {
-  const [datingType, setDatingType] = useState('Men');
+  const [datingType, setDatingType] = useState('');
   const [isProfileVisible, setIsProfileVisible] = useState(true);
   const navigate = useNavigation();
 
+  useEffect(() => {
+    getRegistrationProgress('DatingType').then(data => {
+      if (data) {
+        setDatingType(data.datingType ? data.datingType : '');
+        setIsProfileVisible(data.isProfileVisible);
+      }
+    });
+  }, []);
+
   const handleNext = () => {
-    navigate.navigate('LookingFor', {datingType});
+    if (datingType) {
+      saveRegistrationProgress('DatingType', {
+        DatingType: datingType,
+        isProfileVisible,
+      });
+      navigate.navigate('LookingFor', {datingType, isProfileVisible});
+    } else {
+      alert('Please select who you want to date');
+    }
   };
 
   return (

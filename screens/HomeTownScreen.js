@@ -7,17 +7,31 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
+import {getRegistrationProgress, saveRegistrationProgress} from '../RegisterationUtil';
 
 const HomeTownScreen = () => {
-  const [homeTown, setHomeTown] = useState('Delhi');
+  const [homeTown, setHomeTown] = useState('');
 
   const navigate = useNavigation();
 
+  useEffect(() => {
+    getRegistrationProgress('HomeTown').then(data => {
+      if (data) {
+        setHomeTown(data.homeTown || '');
+      }
+    });
+  }, []);
+
   const handleNext = () => {
+    if (homeTown.length === 0) {
+      alert('Please Enter Your Home Town');
+      return;
+    }
+    saveRegistrationProgress('HomeTown', {homeTown});
     navigate.navigate('Photos', {
       homeTown,
     });

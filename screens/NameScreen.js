@@ -7,17 +7,30 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
+import {
+  getRegistrationProgress,
+  saveRegistrationProgress,
+} from '../RegisterationUtil';
 
 const NameScreen = () => {
-  const [firstName, setFirstName] = useState('asdasd');
+  const [firstName, setFirstName] = useState('');
   const navigate = useNavigation();
+
+  useEffect(() => {
+    getRegistrationProgress('Name').then(data => {
+      if (data) {
+        setFirstName(data.firstName || '');
+      }
+    });
+  }, []);
 
   const handleNext = () => {
     if (firstName.length > 0) {
-      navigate.navigate('Email', {firstName: firstName});
+      saveRegistrationProgress('Name', {name: firstName});
+      navigate.navigate('Email', {name: firstName});
     } else {
       alert('Please Enter Your Name');
     }

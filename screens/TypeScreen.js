@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   SafeAreaView,
@@ -11,14 +11,33 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
+import {
+  getRegistrationProgress,
+  saveRegistrationProgress,
+} from '../RegisterationUtil';
 
 const TypeScreen = () => {
-  const [type, setType] = useState('Straight');
+  const [type, setType] = useState('');
   const [isProfileVisible, setIsProfileVisible] = useState(true);
   const navigate = useNavigation();
 
+  useEffect(() => {
+    getRegistrationProgress('TypeScreen').then(data => {
+      if (data) {
+        setType(data.type ? data.type : '');
+        setIsProfileVisible(data.isProfileVisible);
+      }
+    });
+  }, []);
+
   const handleNext = () => {
-    navigate.navigate('DatingType', {type});
+    if (type) {
+      saveRegistrationProgress('TypeScreen', {type, isProfileVisible});
+
+      navigate.navigate('DatingType', {type, isProfileVisible});
+    } else {
+      alert('Please select your sexuality');
+    }
   };
 
   return (

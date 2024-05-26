@@ -1,6 +1,6 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -27,7 +27,8 @@ import PhotoScreen from '../screens/PhotoScreen';
 import TypeScreen from '../screens/TypeScreen';
 import PrefinalScreens from '../screens/PrefinalScreens';
 import ShowPrompts from '../screens/ShowPrompts';
-import { AuthContext } from '../AuthContext';
+import {AuthContext} from '../AuthContext';
+import SendLikeScreen from '../screens/SendLikeScreen';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -210,6 +211,11 @@ const StackNavigator = () => {
         <Stack.Screen
           name="Main"
           component={BottomTabs}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SendLike"
+          component={SendLikeScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

@@ -142,7 +142,7 @@ app.get('/matches', async (req, res) => {
 
     const crushIds = currentUser.likedProfiles.map(crush => crush._id);
 
-    console.log('filter', filter);
+    // console.log('filter', filter);
 
     //fetch Matches based on filter
 
